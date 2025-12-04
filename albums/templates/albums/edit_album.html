@@ -1,0 +1,45 @@
+{% extends 'albums/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Редактировать альбом: {{ album.title }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form.title.label_tag }}
+                    {{ form.title }}
+                </div>
+                
+                <div class="form-group mb-3">
+                    {{ form.artist.label_tag }}
+                    {{ form.artist }}
+                </div>
+                
+                <div class="form-group mb-3">
+                    {{ form.release_year.label_tag }}
+                    {{ form.release_year }}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form.genre.label_tag }}
+                    {{ form.genre }}
+                </div>
+                
+                <div class="form-group mb-3">
+                    {{ form.duration.label_tag }}
+                    {{ form.duration }}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        <a href="{% url 'view_albums' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

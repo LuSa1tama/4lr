@@ -1,0 +1,91 @@
+{% extends 'albums/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Добавить музыкальный альбом</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Выбор способа сохранения -->
+        <div class="form-group mb-4">
+            <label class="fw-bold">Куда сохранить данные:</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="storage_choice" id="storage_db" value="db" checked>
+                <label class="form-check-label" for="storage_db">
+                    В базу данных (с проверкой на дубликаты)
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="storage_choice" id="storage_file" value="file">
+                <label class="form-check-label" for="storage_file">
+                    В JSON файл
+                </label>
+            </div>
+        </div>
+
+        <!-- Поля формы -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form.title.label_tag }}
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="text-danger">{{ form.title.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    {{ form.artist.label_tag }}
+                    {{ form.artist }}
+                    {% if form.artist.errors %}
+                        <div class="text-danger">{{ form.artist.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    {{ form.release_year.label_tag }}
+                    {{ form.release_year }}
+                    {% if form.release_year.errors %}
+                        <div class="text-danger">{{ form.release_year.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form.genre.label_tag }}
+                    {{ form.genre }}
+                    {% if form.genre.errors %}
+                        <div class="text-danger">{{ form.genre.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    {{ form.duration.label_tag }}
+                    {{ form.duration }}
+                    <small class="form-text text-muted">{{ form.duration.help_text }}</small>
+                    {% if form.duration.errors %}
+                        <div class="text-danger">{{ form.duration.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить альбом</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">На главную</a>
+    </form>
+
+    <!-- Вывод сообщений -->
+    {% if messages %}
+    <div class="mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'warning' %}warning{% elif message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

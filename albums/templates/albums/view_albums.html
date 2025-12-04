@@ -1,0 +1,125 @@
+{% extends 'albums/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Все музыкальные альбомы</h2>
+
+    <!-- Переключение источника данных -->
+    <div class="btn-group mb-4" role="group">
+        <a href="?source=db" class="btn btn-{% if source == 'db' %}primary{% else %}outline-primary{% endif %}">
+            Из базы данных
+        </a>
+        <a href="?source=file" class="btn btn-{% if source == 'file' %}primary{% else %}outline-primary{% endif %}">
+            Из JSON файлов
+        </a>
+    </div>
+
+    <!-- AJAX поиск (только для БД) -->
+    {% if source == 'db' %}
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <input type="text" id="searchInput" class="form-control"
+                placeholder="Поиск по названию, исполнителю, жанру...">
+            <div id="searchResults" class="mt-2"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+
+    {% if albums %}
+    <div class="row">
+        {% for album in albums %}
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    {% if source == 'file' and album.error %}
+                    <!-- Ошибка чтения файла -->
+                    <div class="alert alert-warning">
+                        Файл: {{ album.filename }}<br>
+                        Ошибка: {{ album.error }}
+                    </div>
+                    {% else %}
+                    {% if source == 'db' %}
+                    <!-- Данные из БД -->
+                    <h5 class="card-title">{{ album.title }}</h5>
+                    <p class="card-text">
+                        Исполнитель: {{ album.artist }}<br>
+                        Год выпуска: {{ album.release_year }}<br>
+                        Жанр: {{ album.genre }}<br>
+                        Продолжительность: {{ album.duration }}
+                    </p>
+                    <small class="text-muted">ID: {{ album.id }}</small>
+                    <div class="mt-2">
+                        <a href="{% url 'edit_album' album.id %}" class="btn btn-sm btn-warning">Редактировать</a>
+                        <a href="{% url 'delete_album' album.id %}" class="btn btn-sm btn-danger">Удалить</a>
+                    </div>
+                    {% else %}
+                    <!-- Данные из файла -->
+                    <h5 class="card-title">{{ album.title }}</h5>
+                    <p class="card-text">
+                        Исполнитель: {{ album.artist }}<br>
+                        Год выпуска: {{ album.release_year }}<br>
+                        Жанр: {{ album.genre }}<br>
+                        Продолжительность: {{ album.duration }}
+                    </p>
+                    <small class="text-muted">Файл: {{ album.filename }}</small>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        Нет сохраненных альбомов.
+    </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">На главную</a>
+</div>
+
+<!-- AJAX скрипты для поиска -->
+{% if source == 'db' %}
+<script>
+    // Поиск альбомов
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const query = this.value;
+        if (query.length > 2) {
+            fetch(`/search/?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('searchResults');
+                    if (data.results.length > 0) {
+                        resultsDiv.innerHTML = data.results.map(album =>
+                            `<div class="search-result p-2 border-bottom">
+                            <strong>${album.title}</strong> - ${album.artist} (${album.year})<br>
+                            <small>${album.genre}</small>
+                        </div>`
+                        ).join('');
+                    } else {
+                        resultsDiv.innerHTML = '<div class="text-muted">Ничего не найдено</div>';
+                    }
+                });
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    });
+
+    function editAlbum(albumId) {
+        alert('Редактирование альбома ID: ' + albumId);
+        // Здесь будет модальное окно редактирования
+    }
+
+    function deleteAlbum(albumId) {
+        if (confirm('Вы уверены, что хотите удалить этот альбом?')) {
+            alert('Удаление альбома ID: ' + albumId);
+            // Здесь будет AJAX удаление
+        }
+    }
+</script>
+{% endif %}
+{% endblock %}

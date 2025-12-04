@@ -1,0 +1,33 @@
+{% extends 'albums/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Добавить альбом</h5>
+                <p class="card-text">Создать новый альбом через форму</p>
+                <a href="{% url 'create_album' %}" class="btn btn-primary">Создать</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Загрузить файл</h5>
+                <p class="card-text">Загрузить JSON файл с альбомом</p>
+                <a href="{% url 'upload_album' %}" class="btn btn-success">Загрузить</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Просмотр альбомов</h5>
+                <p class="card-text">Посмотреть все сохраненные альбомы</p>
+                <a href="{% url 'view_albums' %}" class="btn btn-info">Просмотреть</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
