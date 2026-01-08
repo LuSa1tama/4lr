@@ -17,18 +17,13 @@
 - Файл `.env` не включён в репозиторий (добавлен в `.gitignore`).
 - Никакие секреты не хранятся в исходном коде.
 
-## Быстрый запуск (для разработки)
+## Команды Docker и Docker-Compose.
 
-Требования: установленные Docker и Docker Compose.
-
-1. Клонируйте репозиторий:
-   ```bash
-   git clone <ваш-репозиторий>
-   cd music-main
-   ```bash
+```bash
+# Запустить Docker
 docker-compose up --build
- ```bash
-   # Применить миграции
+ 
+# Применить миграции
 docker-compose exec web python manage.py migrate
 
 # Собрать статические файлы
