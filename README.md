@@ -28,4 +28,7 @@ docker-compose exec web python manage.py migrate
 
 # Собрать статические файлы
 docker-compose exec web python manage.py collectstatic --noinput
+
+# Положить Docker
+docker-compose down
 ```bash
