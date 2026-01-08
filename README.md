@@ -8,8 +8,6 @@
 - Backend: Python 3.12, Django 5.1
 - База данных: PostgreSQL 15
 - Контейнеризация: Docker, Docker Compose
-- Веб-сервер: Gunicorn (в production), Django runserver (в разработке)
-- Статические файлы: сбор через collectstatic, хранение в volume
 
 ## Безопасность
 
