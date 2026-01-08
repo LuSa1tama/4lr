@@ -11,7 +11,7 @@ def ensure_albums_dir():
     return albums_dir
 
 def save_album_to_json(album_data):
-    albums_dir = ensure_albums_dir()  # ← ДОБАВЬТЕ ЭТУ СТРОКУ
+    albums_dir = ensure_albums_dir() 
     filename = f"album_{uuid.uuid4().hex[:8]}.json"
     file_path = os.path.join(albums_dir, filename)
     
@@ -19,7 +19,7 @@ def save_album_to_json(album_data):
         json.dump(album_data, f, ensure_ascii=False, indent=4)
     return filename
 
-# Остальной код utils.py оставьте без изменений
+
 
 def validate_json_file(uploaded_file):
     if not uploaded_file.name.lower().endswith('.json'):

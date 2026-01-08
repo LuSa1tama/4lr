@@ -18,22 +18,22 @@ def create_album(request):
             storage_choice = request.POST.get('storage_choice', 'db')
             
             if storage_choice == 'db':
-                # Проверяем дубликат ДО сохранения
+
                 title = form.cleaned_data['title']
                 artist = form.cleaned_data['artist']
                 release_year = form.cleaned_data['release_year']
                 
-                # Проверяем существование дубликата
+
                 if Album.objects.filter(title=title, artist=artist, release_year=release_year).exists():
                     messages.warning(request, 'Такой альбом уже существует в базе данных!')
                     return render(request, 'albums/create_album.html', {'form': form})
                 else:
-                    # Сохраняем если нет дубликата
+                
                     album = form.save()
                     messages.success(request, f'Альбом "{album.title}" сохранен в БД!')
                     form = AlbumForm()
             else:
-                # Сохранение в файл
+            
                 filename = save_album_to_json(form.cleaned_data)
                 messages.success(request, f'Альбом сохранен в файл: {filename}')
                 form = AlbumForm()
@@ -43,20 +43,20 @@ def create_album(request):
     return render(request, 'albums/create_album.html', {'form': form})
 
 def view_albums(request):
-    source = request.GET.get('source', 'db')  # По умолчанию из БД
+    source = request.GET.get('source', 'db') 
     
     if source == 'file':
-        # Данные из файлов
+    
         albums_data, message = get_all_albums()
         context = {'albums': albums_data, 'message': message, 'source': 'file'}
     else:
-        # Данные из БД
+    
         albums_data = Album.objects.all()
         context = {'albums': albums_data, 'source': 'db'}
     
     return render(request, 'albums/view_albums.html', context)
 
-# Остальные функции пока оставим как есть
+
 def upload_album(request):
     if request.method == 'POST' and request.FILES.get('json_file'):
         uploaded_file = request.FILES['json_file']
@@ -70,7 +70,7 @@ def upload_album(request):
     
     return render(request, 'albums/upload_album.html')
 
-# AJAX поиск по БД
+
 def search_albums(request):
     query = request.GET.get('q', '')
     if query:
