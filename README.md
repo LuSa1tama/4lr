@@ -1,2 +1,36 @@
-"# Music Albums App" 
-"Django application for managing music albums with JSON import/export" 
+# Проект «Music Library» — Лабораторная работа
+
+Проект представляет собой веб-приложение на Django для управления музыкальной библиотекой.  
+В рамках лабораторной работы приложение было перенесено с SQLite на PostgreSQL и упаковано в Docker-контейнеры для обеспечения отказоустойчивости, производительности и соответствия промышленным стандартам разработки.
+
+## Технологии
+
+- Backend: Python 3.12, Django 5.1
+- База данных: PostgreSQL 15
+- Контейнеризация: Docker, Docker Compose
+- Веб-сервер: Gunicorn (в production), Django runserver (в разработке)
+- Статические файлы: сбор через collectstatic, хранение в volume
+
+## Безопасность
+
+- Все конфиденциальные данные (пароли, SECRET_KEY) передаются через переменные окружения.
+- Файл `.env` не включён в репозиторий (добавлен в `.gitignore`).
+- Никакие секреты не хранятся в исходном коде.
+
+## Быстрый запуск (для разработки)
+
+Требования: установленные Docker и Docker Compose.
+
+1. Клонируйте репозиторий:
+   ```bash
+   git clone <ваш-репозиторий>
+   cd music-main
+   ```bash
+docker-compose up --build
+ ```bash
+   # Применить миграции
+docker-compose exec web python manage.py migrate
+
+# Собрать статические файлы
+docker-compose exec web python manage.py collectstatic --noinput
+```bash
